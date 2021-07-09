@@ -40,7 +40,7 @@ public class KisiController {
 		return kisiService.kisiEkle(kisi);
 	}
 	
-	@GetMapping(path="/{id}")
+	@GetMapping(path="/ara/{id}")
 	public Optional<Kisi> idIleKisiListele(@PathVariable Integer id) {
 		return kisiService.idIleKisiGetir(id);
 	}
