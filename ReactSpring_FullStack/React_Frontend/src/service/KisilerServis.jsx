@@ -16,6 +16,7 @@ const idIleKisiGetir = (id) => {
   return axiosInstance.get(`/ara/${id}`);
 };
 
+//Patch işlemi
 const idIleKisiGuncelle = (id, kisi) => {
   return axiosInstance.patch(`/yenile/${id}`, kisi);
 };
