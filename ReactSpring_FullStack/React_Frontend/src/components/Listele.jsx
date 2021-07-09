@@ -21,6 +21,7 @@ const Listele = () => {
 
   const history = useHistory();
 
+  // GUncelleme metodu
   const handleGuncelle = (id) => {
     history.push(`/guncelle/${id}`);
   };
