@@ -1,8 +1,10 @@
-package controller;
+package com.security.controller;
 
 import java.util.List;
 import java.util.Optional;
 
+import com.security.model.Kisi;
+import com.security.service.KisiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,12 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import model.Kisi;
-import service.KisiService;
-
 @RestController
 @RequestMapping("/kisiler")
-@CrossOrigin(origins = "http://localhost:8081")
 public class KisiController {
 
 	public KisiService kisiService;
