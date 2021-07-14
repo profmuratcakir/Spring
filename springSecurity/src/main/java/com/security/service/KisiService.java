@@ -42,6 +42,15 @@ public class KisiService {
 		kisiRepository.deleteById(id);
 		return id + " li kisi silindi";
 	}
+
+	public String tumKisileriSil(){
+		if(kisiRepository.count() == 0){
+			return "Veritabaninda kayitli kisi yok.";
+		}else{
+			kisiRepository.deleteAll();
+			return "Tum Kisiler silindi." ;
+		}
+	}
 	
 	public Kisi idIleKisiGuncelle(Kisi guncelKisi) {
 		
