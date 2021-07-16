@@ -17,5 +17,6 @@ public class RegisterRequest {
     @Size(min=6, max=40)
     private String password;
     private String email;
-    private Set<KisiRole> roller;
+    private Set<String> role;
+
 }
