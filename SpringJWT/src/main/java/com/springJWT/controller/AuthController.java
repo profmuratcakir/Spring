@@ -6,8 +6,10 @@ import com.springJWT.model.KisiRole;
 import com.springJWT.repository.KisiRepository;
 import com.springJWT.repository.RoleRepository;
 import com.springJWT.reqres.LoginRequest;
+import com.springJWT.reqres.LoginResponse;
 import com.springJWT.reqres.MesajResponse;
 import com.springJWT.reqres.RegisterRequest;
+import com.springJWT.service.KisiServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -43,9 +47,22 @@ public class AuthController {
 
         //Kimlik denetiminin yapılmasi
         Authentication authentication = authenticationManager.
-                authenticate( new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                authenticate( new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                             loginRequest.getPassword()));
 
-        return ResponseEntity.ok("başarılı");
+        //Kimlik denetimi yapılan kisinin bilgilerinin Service katmanından alinmasi
+        KisiServiceImpl loginKisi = (KisiServiceImpl) authentication.getPrincipal();
+
+        // login olan kisinin Rollerinin elde edilmesi
+        List<String> roller = loginKisi.getAuthorities().stream().
+                                         map(item -> item.getAuthority()).
+                                         collect(Collectors.toList());
+
+        return ResponseEntity.ok( new LoginResponse(loginKisi.getId(),
+                loginKisi.getUsername(),
+                loginKisi.getEmail(),
+                roller
+        ));
     }
 
     @PostMapping("/register")

@@ -13,16 +13,15 @@ import java.util.stream.Collectors;
 public class KisiServiceImpl implements UserDetails {
 
     private static final long serialVersionUID=1L;
-
     private Long id;
     private String username;
     private String email;
-
     @JsonIgnore  // Password bilgisini json dosyasına saklamamasi için koyulan anotasyon
     private String password;
 
     private Collection<? extends GrantedAuthority> otoriteler;
 
+    // Constructor
     public KisiServiceImpl(Long id, String username, String email, String password,
                            Collection<? extends GrantedAuthority> otoriteler) {
         this.id = id;
@@ -55,7 +54,7 @@ public class KisiServiceImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return otoriteler;
     }
 
     @Override
