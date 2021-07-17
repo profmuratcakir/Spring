@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KisiService implements UserDetailsService {
@@ -15,6 +16,7 @@ public class KisiService implements UserDetailsService {
     KisiRepository kisiRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
       Kisi kisi = kisiRepository.findByUsername(username).
               orElseThrow(() -> new UsernameNotFoundException("Kullanici bulunamadi" + username));

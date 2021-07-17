@@ -6,15 +6,17 @@ import com.springJWT.model.KisiRole;
 import com.springJWT.repository.KisiRepository;
 import com.springJWT.repository.RoleRepository;
 import com.springJWT.reqres.LoginRequest;
-import com.springJWT.reqres.LoginResponse;
+import com.springJWT.reqres.JwtResponse;
 import com.springJWT.reqres.MesajResponse;
 import com.springJWT.reqres.RegisterRequest;
+import com.springJWT.security.JWT.JwtUtils;
 import com.springJWT.service.KisiServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +44,9 @@ public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    JwtUtils jwtUtils;
+
     @PostMapping("/login")
     public ResponseEntity<?> girisYap(@RequestBody LoginRequest loginRequest) {
 
@@ -49,6 +54,10 @@ public class AuthController {
         Authentication authentication = authenticationManager.
                 authenticate( new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                              loginRequest.getPassword()));
+
+        // Kisiye gore JWT olsuturulmasi ve Security Context'in guncellenmesi.
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.JwtOlustur(authentication);
 
         //Kimlik denetimi yapılan kisinin bilgilerinin Service katmanından alinmasi
         KisiServiceImpl loginKisi = (KisiServiceImpl) authentication.getPrincipal();
@@ -58,7 +67,8 @@ public class AuthController {
                                          map(item -> item.getAuthority()).
                                          collect(Collectors.toList());
 
-        return ResponseEntity.ok( new LoginResponse(loginKisi.getId(),
+        return ResponseEntity.ok( new JwtResponse(jwt,
+                loginKisi.getId(),
                 loginKisi.getUsername(),
                 loginKisi.getEmail(),
                 roller
